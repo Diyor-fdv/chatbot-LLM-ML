@@ -44,13 +44,13 @@ tables:
 joins:
   - left_table: fact_sales
     right_table: dim_date
-    on: { left_key: date_id, right_key: date_id }
+    "on": { left_key: date_id, right_key: date_id }
   - left_table: fact_sales
     right_table: dim_city
-    on: { left_key: city_id, right_key: city_id }
+    "on": { left_key: city_id, right_key: city_id }
   - left_table: fact_sales
     right_table: dim_product
-    on: { left_key: product_id, right_key: product_id }
+    "on": { left_key: product_id, right_key: product_id }
 
 metrics:
   revenue:
