@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
 from app.api.deps import require_api_key
 from app.api.routes.admin import router as admin_router
@@ -11,8 +11,8 @@ from app.api.routes.schema import router as schema_router
 
 api_router = APIRouter()
 api_router.include_router(health_router, tags=["health"])
-api_router.include_router(chat_router, prefix="/chat", tags=["chat"], dependencies=[require_api_key])
-api_router.include_router(schema_router, tags=["schema"], dependencies=[require_api_key])
-api_router.include_router(admin_router, prefix="/admin", tags=["admin"], dependencies=[require_api_key])
-api_router.include_router(dev_router, prefix="/dev", tags=["dev"], dependencies=[require_api_key])
+api_router.include_router(chat_router, prefix="/chat", tags=["chat"], dependencies=[Depends(require_api_key)])
+api_router.include_router(schema_router, tags=["schema"], dependencies=[Depends(require_api_key)])
+api_router.include_router(admin_router, prefix="/admin", tags=["admin"], dependencies=[Depends(require_api_key)])
+api_router.include_router(dev_router, prefix="/dev", tags=["dev"], dependencies=[Depends(require_api_key)])
 
