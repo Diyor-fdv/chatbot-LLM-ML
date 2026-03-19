@@ -1,0 +1,134 @@
+version: 1
+
+tables:
+  fact_sales:
+    description: "Sales facts at order line granularity."
+    primary_date: order_date
+    columns:
+      sales_id: { type: "id" }
+      order_id: { type: "id" }
+      order_date: { type: "date" }
+      date_id: { type: "id" }
+      city_id: { type: "id" }
+      product_id: { type: "id" }
+      customer_id: { type: "id" }
+      quantity: { type: "number" }
+      revenue: { type: "currency" }
+      cost: { type: "currency" }
+      profit: { type: "currency" }
+
+  dim_date:
+    description: "Calendar date dimension."
+    columns:
+      date_id: { type: "id" }
+      full_date: { type: "date" }
+      year: { type: "number" }
+      month: { type: "number" }
+      day: { type: "number" }
+      week: { type: "number" }
+
+  dim_city:
+    description: "City/region dimension."
+    columns:
+      city_id: { type: "id" }
+      city_name: { type: "text" }
+      region: { type: "text" }
+
+  dim_product:
+    description: "Product/category dimension."
+    columns:
+      product_id: { type: "id" }
+      product_name: { type: "text" }
+      category: { type: "text" }
+
+joins:
+  - left_table: fact_sales
+    right_table: dim_date
+    on: { left_key: date_id, right_key: date_id }
+  - left_table: fact_sales
+    right_table: dim_city
+    on: { left_key: city_id, right_key: city_id }
+  - left_table: fact_sales
+    right_table: dim_product
+    on: { left_key: product_id, right_key: product_id }
+
+metrics:
+  revenue:
+    label: "Revenue"
+    expression: "sum(fact_sales.revenue)"
+    format: "currency"
+    synonyms: ["sales", "turnover", "income", "revenue"]
+  profit:
+    label: "Profit"
+    expression: "sum(fact_sales.profit)"
+    format: "currency"
+    synonyms: ["margin", "profit"]
+  cost:
+    label: "Cost"
+    expression: "sum(fact_sales.cost)"
+    format: "currency"
+    synonyms: ["cost"]
+  orders:
+    label: "Orders"
+    expression: "count_distinct(fact_sales.order_id)"
+    format: "integer"
+    synonyms: ["orders", "order count", "number of orders"]
+  customers:
+    label: "Customers"
+    expression: "count_distinct(fact_sales.customer_id)"
+    format: "integer"
+    synonyms: ["customers", "unique customers"]
+  quantity:
+    label: "Quantity"
+    expression: "sum(fact_sales.quantity)"
+    format: "integer"
+    synonyms: ["qty", "quantity", "units"]
+
+dimensions:
+  date:
+    label: "Date"
+    field: "dim_date.full_date"
+    data_type: "date"
+    synonyms: ["date", "day", "daily"]
+  week:
+    label: "Week"
+    field: "dim_date.week"
+    data_type: "number"
+    synonyms: ["week", "weekly"]
+  month:
+    label: "Month"
+    field: "dim_date.month"
+    data_type: "number"
+    synonyms: ["month", "monthly"]
+  year:
+    label: "Year"
+    field: "dim_date.year"
+    data_type: "number"
+    synonyms: ["year", "yearly", "annual"]
+  city:
+    label: "City"
+    field: "dim_city.city_name"
+    data_type: "text"
+    synonyms: ["city", "cities"]
+  region:
+    label: "Region"
+    field: "dim_city.region"
+    data_type: "text"
+    synonyms: ["region", "oblast", "area"]
+  product:
+    label: "Product"
+    field: "dim_product.product_name"
+    data_type: "text"
+    synonyms: ["product", "products", "sku"]
+  category:
+    label: "Category"
+    field: "dim_product.category"
+    data_type: "text"
+    synonyms: ["category", "categories", "segment"]
+
+named_filters:
+  tashkent:
+    description: "Filter to Tashkent city"
+    field: "dim_city.city_name"
+    op: "ilike"
+    value: "%tashkent%"
