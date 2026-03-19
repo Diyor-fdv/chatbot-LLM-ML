@@ -11,6 +11,9 @@ class Settings(BaseSettings):
     app_port: int = 8000
     log_level: str = "INFO"
 
+    api_auth_enabled: bool = False
+    api_keys: str | None = None
+
     database_url: str
 
     llm_enabled: bool = False

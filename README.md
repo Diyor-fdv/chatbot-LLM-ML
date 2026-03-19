@@ -124,6 +124,13 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ## API Endpoints
 
+### Authentication (API keys)
+
+All endpoints **except** `GET /health` require an API key when `API_AUTH_ENABLED=true`.
+
+- Set keys in `.env`: `API_KEYS=key1,key2`
+- Send header: `X-API-Key: key1`
+
 ### `POST /chat/ask`
 
 Request:

@@ -17,6 +17,8 @@ services:
     environment:
       APP_ENV: dev
       LOG_LEVEL: INFO
+      API_AUTH_ENABLED: "true"
+      API_KEYS: "dev-local-key-1,dev-local-key-2"
       DATABASE_URL: postgresql+psycopg://chatbot:chatbot@db:5432/chatbot
       SEMANTIC_LAYER_PATH: config/semantic_layer.yml
       LLM_ENABLED: "false"
